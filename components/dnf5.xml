@@ -1,0 +1,10 @@
+<image>
+	<profiles>
+		<profile name="Dnf5Core" description="Common core packages for DNF package management with DNF 5"/>
+	</profiles>
+	<packages type="image" patternType="plusRecommended" profiles="Dnf5Core">
+		<ignore name="libdnf-repo-config-Dnf"/>
+		<package name="dnf5"/>
+		<package name="rpm-repos-openSUSE"/>
+	</packages>
+</image>

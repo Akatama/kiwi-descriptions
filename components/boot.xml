@@ -1,0 +1,14 @@
+<image>
+	<profiles>
+		<profile name="BootCore" description="Boot core packages"/>
+	</profiles>
+	<packages type="image" patternType="plusRecommended" profiles="BootCore">
+		<package name="ca-certificates-mozilla"/>
+		<package name="chrony"/>
+		<package name="kernel-default"/>
+		<package name="patterns-base-base"/>
+		<package name="patterns-base-bootloader"/>
+		<package name="patterns-base-selinux"/>
+		<package name="NetworkManager"/>
+	</packages>
+</image>

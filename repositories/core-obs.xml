@@ -1,0 +1,5 @@
+<image>
+	<repository type="rpm-md">
+		<source path="obsrepositories:/"/>
+	</repository>
+</image>

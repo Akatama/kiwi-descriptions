@@ -1,0 +1,164 @@
+<image>
+	<profiles>
+		<profile name="CloudCore" description="Cloud image core packages">
+			<requires profile="BootCore"/>
+			<requires profile="ZyppCore"/>
+		</profile>
+		<profile name="Cloud-Base-Azure" description="Azure Base Guest Image">
+			<requires profile="CloudCore"/>
+		</profile>
+		<profile name="Cloud-Base-AmazonEC2" description="Amazon EC2 HVM Base Guest Image">
+			<requires profile="CloudCore"/>
+		</profile>
+		<profile name="Cloud-Base-GCE" description="GCE Base Guest Image">
+			<requires profile="CloudCore"/>
+		</profile>
+		<profile name="Cloud-Base-Generic" description="Generic Base Guest Image">
+			<requires profile="CloudCore"/>
+		</profile>
+		<profile name="Cloud-Base-OpenStack" description="OpenStack Base Guest Image">
+			<requires profile="Cloud-Base-Generic"/>
+		</profile>
+	</profiles>
+	<preferences profiles="Cloud-Base-Azure" arch="x86_64,aarch64">
+		<type image="oem" format="vhd-fixed" formatoptions="force_size"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="true" btrfs_root_is_snapshot="true"
+		      fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=tty1 console=ttyS0,115200n8 earlyprintk=ttyS0 systemd.firstboot=off"
+		      devicepersistency="by-uuid"
+		      bootpartition="false" efipartsize="100" firmware="uefi"
+		      rootfs_label="opensuse"
+		      >
+			<bootloader name="grub2" console="serial" timeout="0"/>
+			<systemdisk>
+				<volume name="root"/>
+				<volume name="home"/>
+				<volume name="opt"/>
+				<volume name="srv"/>
+				<volume name="boot/grub2/i386-pc"/>
+				<volume name="boot/grub2/x86_64-efi" mountpoint="boot/grub2/x86_64-efi"/>
+				<volume name="boot/grub2/arm64-efi" mountpoint="boot/grub2/arm64-efi"/>
+				<volume name="usr/local"/>
+				<volume name="var" copy_on_write="false"/>
+			</systemdisk>
+			<size unit="G">5</size>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Cloud-Base-AmazonEC2" arch="x86_64,aarch64">
+		<type image="oem"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="true" btrfs_root_is_snapshot="true"
+		      fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=tty1 console=ttyS0,115200n8 systemd.firstboot=off"
+		      devicepersistency="by-uuid"
+		      bootpartition="false" efipartsize="100" firmware="uefi"
+		      rootfs_label="opensuse"
+		      >
+			<bootloader name="grub2" timeout="0"/>
+			<size unit="G">5</size>
+			<systemdisk>
+				<volume name="root"/>
+				<volume name="home"/>
+				<volume name="opt"/>
+				<volume name="srv"/>
+				<volume name="boot/grub2/i386-pc"/>
+				<volume name="boot/grub2/x86_64-efi" mountpoint="boot/grub2/x86_64-efi"/>
+				<volume name="boot/grub2/arm64-efi" mountpoint="boot/grub2/arm64-efi"/>
+				<volume name="usr/local"/>
+				<volume name="var" copy_on_write="false"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Cloud-Base-GCE" arch="x86_64,aarch64">
+		<type image="oem" format="gce"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="true" btrfs_root_is_snapshot="true"
+		      fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=ttyS0,38400n8d systemd.firstboot=off"
+		      devicepersistency="by-uuid"
+		      bootpartition="false" efipartsize="100" firmware="uefi"
+		      rootfs_label="opensuse"
+		      >
+			<bootloader name="grub2" timeout="0"/>
+			<!-- GCP engineers have told us the disk images have bad performance if they are anything less than 10G -->
+			<size unit="G">10</size>
+			<systemdisk>
+				<volume name="root"/>
+				<volume name="home"/>
+				<volume name="opt"/>
+				<volume name="srv"/>
+				<volume name="boot/grub2/i386-pc"/>
+				<volume name="boot/grub2/x86_64-efi" mountpoint="boot/grub2/x86_64-efi"/>
+				<volume name="boot/grub2/arm64-efi" mountpoint="boot/grub2/arm64-efi"/>
+				<volume name="usr/local"/>
+				<volume name="var" copy_on_write="false"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<preferences profiles="Cloud-Base-Generic" arch="x86_64,aarch64">
+		<type image="oem" format="qcow2"
+		      filesystem="btrfs" btrfs_root_is_subvolume="true" btrfs_set_default_volume="true" btrfs_root_is_snapshot="true"
+		      fsmountoptions="compress=zstd:1"
+		      kernelcmdline="no_timer_check console=tty1 console=ttyS0,115200n8 systemd.firstboot=off"
+		      devicepersistency="by-uuid"
+		      bootpartition="false" efipartsize="100" firmware="uefi"
+		      rootfs_label="opensuse"
+		      >
+			<bootloader name="grub2" console="serial" timeout="0"/>
+			<size unit="G">5</size>
+			<systemdisk>
+				<volume name="root"/>
+				<volume name="home"/>
+				<volume name="opt"/>
+				<volume name="srv"/>
+				<volume name="boot/grub2/i386-pc"/>
+				<volume name="boot/grub2/x86_64-efi" mountpoint="boot/grub2/x86_64-efi"/>
+				<volume name="boot/grub2/arm64-efi" mountpoint="boot/grub2/arm64-efi"/>
+				<volume name="usr/local"/>
+				<volume name="var" copy_on_write="false"/>
+			</systemdisk>
+			<oemconfig>
+				<oem-resize>false</oem-resize>
+			</oemconfig>
+		</type>
+	</preferences>
+	<packages type="image" patternType="plusRecommended" profiles="CloudCore">
+		<ignore name="firewalld"/>
+		<ignore name="fwupd"/>
+		<ignore name="plymouth"/>
+		<package name="btrfs-progs"/>
+		<package name="cloud-init"/>
+		<package name="rsync"/>
+		<package name="tar"/>
+		<package name="glibc-locale-base"/>
+	</packages>
+	<!-- none of the packages for these are in factory yet...
+	<packages type="image" patternType="plusRecommended" profiles="Cloud-Base-AmazonEC2">
+		<package name="amazon-ec2-utils"/>
+		<package name="awscli2"/>
+		<package name="ec2-instance-connect"/>
+	</packages>
+	<packages type="image" patternType="plusRecommended" profiles="Cloud-Base-Azure">
+		<package name="WALinuxAgent"/>
+		<package name="hyperv-daemons"/>
+	</packages>
+	-->
+	<packages type="image" patternType="plusRecommended" profiles="Cloud-Base-GCE">
+		<package name="google-guest-configs"/>
+		<package name="google-guest-oslogin"/>
+		<package name="google-guest-agent"/>
+	</packages>
+	<packages type="image" patternType="plusRecommended" profiles="Cloud-Base-Generic">
+		<package name="qemu-guest-agent"/>
+	</packages>
+	<packages type="uninstall" profiles="Cloud-Base-GCE">
+		<package name="cloud-init"/>
+	</packages>
+</image>
