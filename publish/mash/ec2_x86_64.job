@@ -1,0 +1,16 @@
+{
+    "boot_firmware": [
+        "uefi-preferred"
+    ],
+    "cloud_account": "aws",
+    "cloud_architecture": "x86_64",
+    "cloud_image_name": "opensuse-tumbleweed-x86_64-v{date}",
+    "download_url": "https://download.opensuse.org/repositories/Cloud:/Images:/Factory/images_TW/",
+    "image": "openSUSE-Tumbleweed",
+    "image_description": "openSUSE Tumbleweed",
+    "last_service": "create",
+    "notification_email": "cloud-team@opensuse.org",
+    "notify": false,
+    "profile": "Cloud-Base-AmazonEC2",
+    "utctime": "now"
+}

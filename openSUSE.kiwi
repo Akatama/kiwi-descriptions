@@ -1,1 +1,38 @@
-config.xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<image schemaversion="7.4" name="openSUSE-Tumbleweed">
+	<description type="system">
+		<author>openSUSE Project Contributors</author>
+		<contact>factory@lists.opensuse.org</contact>
+		<specification>openSUSE Linux</specification>
+	</description>
+	<preferences>
+		<version>16.0.0</version>
+		<packagemanager>zypper</packagemanager>
+		<locale>en_US</locale>
+		<keytable>us</keytable>
+		<timezone>UTC</timezone>
+		<release-version>tumbleweed</release-version>
+	</preferences>
+	<include from="this://./repositories/core.xml"/>
+	<include from="this://./components/boot.xml"/>
+	<include from="this://./components/users.xml"/>
+	<include from="this://./components/dnf4.xml"/>
+	<include from="this://./components/dnf5.xml"/>
+	<include from="this://./components/zypper.xml"/>
+	<include from="this://./teams/cloud.xml"/>
+	<packages type="bootstrap">
+		<package name="gawk"/>
+		<package name="grep"/>
+		<package name="gzip"/>
+		<package name="udev"/>
+		<package name="xz"/>
+		<package name="shadow"/>
+		<package name="filesystem"/>
+		<package name="glibc-locale"/>
+		<package name="cracklib-dict-full"/>
+		<package name="ca-certificates"/>
+		<package name="ca-certificates-mozilla"/>
+		<package name="openSUSE-release"/>
+	</packages>
+</image>

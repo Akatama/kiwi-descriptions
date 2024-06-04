@@ -2,7 +2,7 @@
 	<profiles>
 		<profile name="ZyppCore" description="Common core packages for Zypp package management"/>
 	</profiles>
-	<packages type="image" patternType="plusRecommended" profiles="ZyppCore">
+	<packages type="image" profiles="ZyppCore">
 		<package name="zypper"/>
 		<package name="openSUSE-repos"/>
 	</packages>

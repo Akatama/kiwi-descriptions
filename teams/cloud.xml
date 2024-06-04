@@ -58,6 +58,7 @@
 		      >
 			<bootloader name="grub2" timeout="0"/>
 			<size unit="G">5</size>
+			<machine xen_loader="hvmloader"/>
 			<systemdisk>
 				<volume name="root"/>
 				<volume name="home"/>
@@ -135,21 +136,24 @@
 		<ignore name="plymouth"/>
 		<package name="btrfs-progs"/>
 		<package name="cloud-init"/>
+		<package name="cloud-init-config-suse"/>
 		<package name="rsync"/>
 		<package name="tar"/>
 		<package name="glibc-locale-base"/>
 	</packages>
-	<!-- none of the packages for these are in factory yet...
 	<packages type="image" patternType="plusRecommended" profiles="Cloud-Base-AmazonEC2">
-		<package name="amazon-ec2-utils"/>
-		<package name="awscli2"/>
-		<package name="ec2-instance-connect"/>
+		<package name="python3-ec2imgutils"/>
+		<package name="python3-ec2metadata"/>
+		<package name="grub2-x86_64-xen" arch="x86_64"/>
+		<package name="aws-cli"/>
 	</packages>
 	<packages type="image" patternType="plusRecommended" profiles="Cloud-Base-Azure">
-		<package name="WALinuxAgent"/>
-		<package name="hyperv-daemons"/>
+		<package name="azure-cli"/>
+		<package name="cloud-netconfig-azure"/>
+		<package name="hyper-v" arch="x86_64,aarch64"/>
+		<package name="python3-azuremetadata"/>
+		<package name="python-azure-agent"/>
 	</packages>
-	-->
 	<packages type="image" patternType="plusRecommended" profiles="Cloud-Base-GCE">
 		<package name="google-guest-configs"/>
 		<package name="google-guest-oslogin"/>
@@ -160,5 +164,6 @@
 	</packages>
 	<packages type="uninstall" profiles="Cloud-Base-GCE">
 		<package name="cloud-init"/>
+        <package name="cloud-init-config-suse"/>
 	</packages>
 </image>

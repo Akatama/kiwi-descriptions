@@ -10,5 +10,6 @@
 		<package name="patterns-base-bootloader"/>
 		<package name="patterns-base-selinux"/>
 		<package name="NetworkManager"/>
+		<package name="shim" arch="x86_64,aarch64"/>
 	</packages>
 </image>
