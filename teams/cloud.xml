@@ -153,6 +153,7 @@
 		<package name="hyper-v" arch="x86_64,aarch64"/>
 		<package name="python3-azuremetadata"/>
 		<package name="python-azure-agent"/>
+		<package name="python-azure-agent-config-server"/>
 	</packages>
 	<packages type="image" patternType="plusRecommended" profiles="Cloud-Base-GCE">
 		<package name="google-guest-configs"/>

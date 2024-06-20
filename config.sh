@@ -1,4 +1,8 @@
 #!/bin/bash
+#======================================
+# kiwi helper functions
+#--------------------------------------
+test -f /.kconfig && . /.kconfig
 
 set -euxo pipefail
 
@@ -99,6 +103,43 @@ if [[ "$kiwi_profiles" == *"Azure"* ]]; then
 	[keyfile]
 	unmanaged-devices=driver:mlx4_core;driver:mlx5_core
 	EOF
+
+	# dhcp should not set the hostname, waagent does that
+	baseUpdateSysConfig /etc/sysconfig/network/dhcp DHCLIENT_SET_HOSTNAME "no"
+
+	# included from azure-scripts
+	# Implement password policy
+	# Length: 6-72 characters long
+	# Contain any combination of 3 of the following:
+	#   - a lowercase character
+	#   - an uppercase character
+	#   - a number
+	#   - a special character
+	pwd_policy="minlen=6 dcredit=1 ucredit=1 lcredit=1 ocredit=1 minclass=3"
+	sed -i -e "s/pam_cracklib.so/pam_cracklib.so $pwd_policy/" \
+		/etc/pam.d/common-password-pc
+
+	# ssh: ClientAliveInterval 180sec
+	sed -i -e 's/#ClientAliveInterval 0/ClientAliveInterval 180/' \
+		/etc/ssh/sshd_config
+
+	# ssh: ChallengeResponseAuthentication no
+	sed -i -e "s/#ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/" \
+		/etc/ssh/sshd_config
+
+	# Keep the default kernel log level (bsc#1169201)
+	sed -i -e 's/$klogConsoleLogLevel/#$klogConsoleLogLevel/' /etc/rsyslog.conf
+
+	# dhcp timeout 300sec
+	dc=/etc/dhclient.conf
+	if grep -qE '^timeout' $dc ; then
+		sed -r -i 's/^timeout.*/timeout 300;/' $dc
+	else
+		echo 'timeout 300;' >> $dc
+	fi
+
+    # Azure agent
+    systemctl enable waagent
 fi
 
 #======================================
