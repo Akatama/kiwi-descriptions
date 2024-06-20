@@ -104,9 +104,6 @@ if [[ "$kiwi_profiles" == *"Azure"* ]]; then
 	unmanaged-devices=driver:mlx4_core;driver:mlx5_core
 	EOF
 
-	# dhcp should not set the hostname, waagent does that
-	baseUpdateSysConfig /etc/sysconfig/network/dhcp DHCLIENT_SET_HOSTNAME "no"
-
 	# included from azure-scripts
 	# Implement password policy
 	# Length: 6-72 characters long
@@ -126,9 +123,6 @@ if [[ "$kiwi_profiles" == *"Azure"* ]]; then
 	# ssh: ChallengeResponseAuthentication no
 	sed -i -e "s/#ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/" \
 		/usr/etc/ssh/sshd_config
-
-	# Keep the default kernel log level (bsc#1169201)
-	sed -i -e 's/$klogConsoleLogLevel/#$klogConsoleLogLevel/' /etc/rsyslog.conf
 
 	# dhcp timeout 300sec
 	dc=/etc/dhclient.conf
