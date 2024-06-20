@@ -121,11 +121,11 @@ if [[ "$kiwi_profiles" == *"Azure"* ]]; then
 
 	# ssh: ClientAliveInterval 180sec
 	sed -i -e 's/#ClientAliveInterval 0/ClientAliveInterval 180/' \
-		/etc/ssh/sshd_config
+		/usr/etc/ssh/sshd_config
 
 	# ssh: ChallengeResponseAuthentication no
 	sed -i -e "s/#ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/" \
-		/etc/ssh/sshd_config
+		/usr/etc/ssh/sshd_config
 
 	# Keep the default kernel log level (bsc#1169201)
 	sed -i -e 's/$klogConsoleLogLevel/#$klogConsoleLogLevel/' /etc/rsyslog.conf
