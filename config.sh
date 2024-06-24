@@ -88,6 +88,7 @@ if [[ "$kiwi_profiles" == *"Azure"* ]]; then
 	ClientAliveInterval 120
 	EOF
 
+	# Azure time
 	cat >> /etc/chrony.conf <<- EOF
 	# Azure's virtual time source:
 	# https://docs.microsoft.com/en-us/azure/virtual-machines/linux/time-sync#check-for-ptp-clock-source
@@ -104,33 +105,11 @@ if [[ "$kiwi_profiles" == *"Azure"* ]]; then
 	unmanaged-devices=driver:mlx4_core;driver:mlx5_core
 	EOF
 
-	# included from azure-scripts
-	# Implement password policy
-	# Length: 6-72 characters long
-	# Contain any combination of 3 of the following:
-	#   - a lowercase character
-	#   - an uppercase character
-	#   - a number
-	#   - a special character
-	pwd_policy="minlen=6 dcredit=1 ucredit=1 lcredit=1 ocredit=1 minclass=3"
-	sed -i -e "s/pam_cracklib.so/pam_cracklib.so $pwd_policy/" \
-		/etc/pam.d/common-password-pc
-
-	# ssh: ClientAliveInterval 180sec
-	sed -i -e 's/#ClientAliveInterval 0/ClientAliveInterval 180/' \
-		/usr/etc/ssh/sshd_config
-
-	# ssh: ChallengeResponseAuthentication no
-	sed -i -e "s/#ChallengeResponseAuthentication yes/ChallengeResponseAuthentication no/" \
-		/usr/etc/ssh/sshd_config
-
-	# dhcp timeout 300sec
-	dc=/etc/dhclient.conf
-	if grep -qE '^timeout' $dc ; then
-		sed -r -i 's/^timeout.*/timeout 300;/' $dc
-	else
-		echo 'timeout 300;' >> $dc
-	fi
+	# SSH config overlay
+	cat > /usr/etc/ssh/sshd_config.d/40-azure.conf <<- EOF
+	ClientAliveInterval 180
+	ChallengeResponseAuthentication no
+	EOF
 
     # Azure agent
     systemctl enable waagent
