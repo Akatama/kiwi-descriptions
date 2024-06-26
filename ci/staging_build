@@ -1,0 +1,126 @@
+#!/bin/bash
+
+set -e
+
+# max wait 30 minutes
+timeout_sec=1800
+
+# branch name to use for staging build, e.g factory
+branch=$1
+
+# request id, should be pull request ID, e.g 0815
+request_id=$2
+
+# workflow function name that should be used with the pull request
+# e.g component_cloud
+workflow=$3
+
+usage() {
+    echo "usage: staging_build branch id workflow"
+    echo "example: staging_build factory 0815 component_cloud"
+    exit 1
+}
+
+cleanup() {
+    echo "cleaning up..."
+    test -n "${stage}" && rm -rf "${stage}"
+}
+
+if [ -z "${branch}" ];then
+    echo "no branch name provided"
+    usage
+fi
+if [ -z "${request_id}" ];then
+    echo "no request ID provided"
+    usage
+fi
+if [ -z "${workflow}" ];then
+    echo "no workflow name provided"
+    usage
+fi
+
+# Workflow functions
+workflow_component_cloud() {
+    if test -z "${stage}";then
+        echo "No staging directory present"
+        exit 1
+    fi
+    pushd "${stage}"
+    git clone https://code.opensuse.org/project/kiwi-descriptions.git
+    pushd kiwi-descriptions
+    git checkout "${branch}"
+    ./kiwi-build \
+        --obs-source \
+        --output-dir=_obs \
+        --image-type=oem \
+        --image-profile=Cloud-Base-AmazonEC2,Cloud-Base-GCE,Cloud-Base-Azure
+    popd
+    popd
+    export obs_sources="${stage}/kiwi-descriptions/_obs"
+}
+
+# Functions
+create_staging_package() {
+    if test -z "${stage}";then
+        echo "No staging directory present"
+        exit 1
+    fi
+    if test -z "${obs_sources}";then
+        echo "No source checkout present"
+        exit 1
+    fi
+    pushd "${stage}"
+    osc co Cloud:Images:Factory:Staging
+    pushd Cloud:Images:Factory:Staging
+    osc mkpac "${branch}_${request_id}"
+    pushd "${branch}_${request_id}"
+    cp "${obs_sources}"/* .
+    # shellcheck disable=SC2035
+    osc add *
+    osc ci -m "PR review ${request_id}"
+    popd
+    popd
+    popd
+}
+
+delete_staging_package() {
+    osc rdelete -m "PR review ${request_id} done" \
+        Cloud:Images:Factory:Staging "${branch}_${request_id}"
+}
+
+build_succeeded() {
+    while read -r line; do
+        # all builds must succeed, if only one does not, mark as failed
+        if [[ ! $line =~ "succeeded" ]];then
+            return 1
+        fi
+    done < <(osc r Cloud:Images:Factory:Staging "${branch}_${request_id}" 2>&1)
+    return 0
+}
+
+
+# Signals
+trap cleanup EXIT
+
+# Main
+stage=$(mktemp -d /var/tmp/staging-XXXX)
+
+eval workflow_"${workflow}"
+
+create_staging_package
+
+count=0
+while [ "${count}" -le "${timeout_sec}" ];do
+    if build_succeeded; then
+        delete_staging_package
+        exit 0
+    fi
+    echo "Waiting in line..."
+    sleep 10
+    count=$((count + 10))
+done
+
+echo "Build did not succeed in ${timeout_sec} sec"
+echo "See https://build.opensuse.org/project/show/Cloud:Images:Factory:Staging/${branch}_${request_id} for details"
+exit 1
+
