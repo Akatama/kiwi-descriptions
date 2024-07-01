@@ -84,9 +84,8 @@ fi
 # Azure: Setup
 #--------------------------------------
 if [[ "$kiwi_profiles" == *"Azure"* ]]; then
-	cat > /etc/ssh/sshd_config.d/50-client-alive-interval.conf <<- EOF
-	ClientAliveInterval 120
-	EOF
+	# Azure agent sshd_config fix
+	cp -a /usr/etc/ssh/sshd_config /etc/ssh/sshd_config
 
 	# Azure time
 	cat >> /etc/chrony.conf <<- EOF
@@ -109,6 +108,8 @@ if [[ "$kiwi_profiles" == *"Azure"* ]]; then
 	cat > /usr/etc/ssh/sshd_config.d/40-azure.conf <<- EOF
 	ClientAliveInterval 180
 	ChallengeResponseAuthentication no
+	PasswordAuthentication no
+	UsePAM yes
 	EOF
 
     # Azure agent
