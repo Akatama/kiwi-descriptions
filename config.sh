@@ -105,7 +105,7 @@ if [[ "$kiwi_profiles" == *"Azure"* ]]; then
 	EOF
 
 	# SSH config overlay
-	cat > /usr/etc/ssh/sshd_config.d/40-azure.conf <<- EOF
+	cat > /etc/ssh/sshd_config.d/40-azure.conf <<- EOF
 	ClientAliveInterval 180
 	ChallengeResponseAuthentication no
 	PasswordAuthentication no
