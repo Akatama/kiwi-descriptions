@@ -47,7 +47,7 @@ Uploading into the cloud can be done using the mash workflow as follows
 []$ podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./mash:/mnt mash
 ```
 
-Once the mash instance has started, login, setup credentials and run a
+Once the mash instance has started, setup credentials and run a
 workflow. The mash system supports different cloud providers and is based
 on a pipeline of services to fetch, test, upload and publish OS images
 in the public cloud. All this information is provided by a mash job
@@ -60,20 +60,7 @@ from the associated Open Build Service project at
 https://build.opensuse.org/package/show/Cloud:Images:Factory/team_cloud
 into the AWS cloud.
 
-1. Login to the instance
-
-        []$ login: masher
-        []$ password: linux
-
-2. Create a user for mash:
-
-        []$ mash user create --email cloud-team@opensuse.org
-
-3. Login to mash:
-
-        []$ mash auth login --email cloud-team@opensuse.org
-
-4. Setup public cloud account
+1. Setup public cloud account
 
         []$ mash account ec2 add \
              --name aws \
@@ -88,7 +75,7 @@ into the AWS cloud.
     from the respective AWS account credentials and account
     setup.
 
-5. Create a job
+2. Create a job
 
         []$ mash job ec2 add /mnt/ec2_x86_64.job
 
