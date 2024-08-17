@@ -1,0 +1,28 @@
+{
+    "boot_firmware": [
+        "uefi-preferred"
+    ],
+    "cloud_account": "azure",
+    "cloud_architecture": "aarch64",
+    "cloud_image_name": "opensuse-tumbleweed-aarch64-v{date}",
+    "download_url": "https://download.opensuse.org/repositories/Cloud:/Images:/Factory/images_TW/",
+    "image": "openSUSE-Tumbleweed",
+    "image_description": "openSUSE Tumbleweed",
+    "notification_email": "cloud-team@opensuse.org",
+    "notify": false,
+    "profile": "Cloud-Base-Azure",
+    "utctime": "now",
+    "region": "centralus",
+    "last_service": "create",
+
+    "source_container": "test",
+    "source_resource_group": "openSUSETest",
+    "source_storage_account": "opensusetest",
+    "force_replace_image": true,
+
+    "offer_id": "arm",
+    "publisher_id": "jimmy",
+    "sku": "1",
+    "gallery_name": "openSUSEGallery"
+
+}
