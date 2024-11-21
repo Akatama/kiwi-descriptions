@@ -1,12 +1,11 @@
-resource "azurerm_resource_group" "rg" {
-    location = var.location
+data "azurerm_resource_group" "rg" {
     name = var.resourceGroupName
 }
 
 resource "azurerm_storage_account" "sa" {
     name = var.storageAccountName
-    resource_group_name = azurerm_resource_group.rg.name
-    location = azurerm_resource_group.rg.location
+    resource_group_name = data.azurerm_resource_group.rg.name
+    location = var.location
     account_tier = "Standard"
     account_replication_type = var.storageAccountReplicationType
 }
@@ -19,8 +18,8 @@ resource "azurerm_storage_container" "container" {
 
 resource "azurerm_shared_image_gallery" "computeGallery" {
     name = var.galleryName
-    resource_group_name = azurerm_resource_group.rg.name
-    location = azurerm_resource_group.rg.location
+    resource_group_name = data.azurerm_resource_group.rg.name
+    location = var.location
     description = var.galleryDescription
     sharing {
         permission = "Community"
@@ -36,8 +35,8 @@ resource "azurerm_shared_image_gallery" "computeGallery" {
 resource "azurerm_shared_image" "armImageDefinitionV1" {
     name = "${var.armImageDefinitionBaseName}_${var.imageDefinitionSKU}"
     gallery_name = azurerm_shared_image_gallery.computeGallery.name
-    resource_group_name = azurerm_resource_group.rg.name
-    location =  azurerm_resource_group.rg.location
+    resource_group_name = data.azurerm_resource_group.rg.name
+    location =  var.location
     os_type = "Linux"
     architecture = "Arm64"
     hyper_v_generation = "V1"
@@ -53,8 +52,8 @@ resource "azurerm_shared_image" "armImageDefinitionV1" {
 resource "azurerm_shared_image" "armImageDefinitionV2" {
     name = "${var.armImageDefinitionBaseName}_${var.imageDefinitionSKU}_${var.imageDefinitionGeneration2}"
     gallery_name = azurerm_shared_image_gallery.computeGallery.name
-    resource_group_name = azurerm_resource_group.rg.name
-    location =  azurerm_resource_group.rg.location
+    resource_group_name = data.azurerm_resource_group.rg.name
+    location =  var.location
     os_type = "Linux"
     architecture = "Arm64"
     hyper_v_generation = "V2"
@@ -70,8 +69,8 @@ resource "azurerm_shared_image" "armImageDefinitionV2" {
 resource "azurerm_shared_image" "x86ImageDefitionV1" {
     name = "${var.x86ImageDefinitionBaseName}_${var.imageDefinitionSKU}"
     gallery_name = azurerm_shared_image_gallery.computeGallery.name
-    resource_group_name = azurerm_resource_group.rg.name
-    location =  azurerm_resource_group.rg.location
+    resource_group_name = data.azurerm_resource_group.rg.name
+    location =  var.location
     os_type = "Linux"
     architecture = "x64"
     hyper_v_generation = "V1"
@@ -87,8 +86,8 @@ resource "azurerm_shared_image" "x86ImageDefitionV1" {
 resource "azurerm_shared_image" "x86ImageDefitionV2" {
     name = "${var.x86ImageDefinitionBaseName}_${var.imageDefinitionSKU}_${var.imageDefinitionGeneration2}"
     gallery_name = azurerm_shared_image_gallery.computeGallery.name
-    resource_group_name = azurerm_resource_group.rg.name
-    location =  azurerm_resource_group.rg.location
+    resource_group_name = data.azurerm_resource_group.rg.name
+    location =  var.location
     os_type = "Linux"
     architecture = "x64"
     hyper_v_generation = "V2"
