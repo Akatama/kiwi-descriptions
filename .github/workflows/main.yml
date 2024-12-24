@@ -12,10 +12,19 @@ jobs:
       run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
     - name: Run Container
       id: container
-      run: podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish:/mnt mash
-    - name: Upload x86 Image
+      run: podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish/mash:/mnt mash
+    - name: Create Mash Azure account
+      id: azure
+      run: mash account azure add --name azure --region centralus --source-container images --source-resource-group openSUSE --source-storage-account tumbleweedtest --credentials ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Upload x86 images
       id: x86
-      run: mash account azure add --name azure --region centralus --source-container images --source-resource-group openSUSE --source-storage-account tumbleweedtest --credentials 
+      run: mash job azure add ./mnt/azure_x86_64.job
+    - name: Upload Aarch64 images
+      id: aarch64
+      run: mash job azure add ./mnt/azure_aarch64.job
+    #TODO: grab the job_ids for each job (run them in paralell if possible)
+    # Then us mash job wait --job_id ${job_id} to wait for the jobs to finish
+    
       
     
       
