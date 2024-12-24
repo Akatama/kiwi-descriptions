@@ -1,32 +1,6 @@
 on: [push]
 name: Deploy Tumbleweed Images to Azure Shared Gallery
 jobs:
-  deploy-tofu-config:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./opentofu/azure
-    steps:
-    - uses: actions/checkout@main
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Setup OpenTofu
-      uses: opentofu/setup-opentofu@v1
-    - name: OpenTofu fmt
-      id: fmt
-      run: tofu fmt -check
-      continue-on-error: true
-    - name: OpenTofu Validate
-      id: validate
-      run: tofu validate -no-color
-    - name: OpenTofu Plan
-      id: plan
-      run: tofu plan -no-color
-      continue-on-error: true
-    - name: OpenTofu Apply
-      id: apply
-      run: tofu apply -auto-approve
   deploy-tumbleweed-images:
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +13,9 @@ jobs:
     - name: Run Container
       id: container
       run: podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish:/mnt mash
-    #finish up
+    - name: Upload x86 Image
+      id: x86
+      run: mash account azure add --name azure --region centralus --source-container images --source-resource-group openSUSE --source-storage-account tumbleweedtest --credentials 
+      
     
       
