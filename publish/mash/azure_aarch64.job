@@ -16,14 +16,14 @@
     "last_service": "create",
 
     "source_container": "images",
-    "source_resource_group": "openSUSE",
-    "source_storage_account": "tumbleweedtest",
+    "source_resource_group": "Tumbleweed",
+    "source_storage_account": "tumbleweedimages",
     "force_replace_image": true,
 
     "offer_id": "arm",
     "publisher_id": "jimmy",
     "sku": "tumbleweed",
     "generation_id": "tumbleweed_gen2",
-    "gallery_name": "TumbleweedTestGallery"
+    "gallery_name": "TumbleweedGallery"
 
 }

@@ -1,0 +1,8 @@
+armImageDefinitionBaseName = "arm"
+x86ImageDefinitionBaseName = "86"
+storageAccountName         = "tumbleweedimages"
+eula                       = "This is a test, please don't sue me."
+prefix                     = "Jimmy"
+publisherURI               = "Jimmy"
+galleryName                = "TumbleweedGallery"
+resourceGroupName          = "Tumbleweed"

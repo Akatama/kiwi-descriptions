@@ -1,0 +1,4 @@
+/opentofu/*/terraform.tfstate
+/opentofu/*/terraform.tfstate.backup
+/opentofu/*/.terraform
+/opentofu/*/.terraform.lock.hcl
