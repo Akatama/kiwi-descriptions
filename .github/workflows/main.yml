@@ -1,7 +1,7 @@
 on: [push]
 name: Deploy Tumbleweed Images to Azure Shared Gallery
 jobs:
-  deploy-tumbleweed-images:
+  deploy-tumbleweed-aarch-images:
     runs-on: ubuntu-latest
     steps:
     - name: Install Podman
@@ -15,15 +15,34 @@ jobs:
       run: podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish/mash:/mnt mash
     - name: Create Mash Azure account
       id: azure
-      run: mash account azure add --name azure --region centralus --source-container images --source-resource-group openSUSE --source-storage-account tumbleweedtest --credentials ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Upload x86 images
-      id: x86
-      run: mash job azure add ./mnt/azure_x86_64.job
+      run: mash account azure add --name azure --region centralus --source-container images --source-resource-group Tumbleweed --source-storage-account Tumbleweed --credentials ${{ secrets.AZURE_CREDENTIALS }}
     - name: Upload Aarch64 images
-      id: aarch64
-      run: mash job azure add ./mnt/azure_aarch64.job
-    #TODO: grab the job_ids for each job (run them in paralell if possible)
-    # Then us mash job wait --job_id ${job_id} to wait for the jobs to finish
+      id: aarch64_start
+      run: echo 'AARCH_JOB_ID=$(mash job azure add ./mash/azure_aarch64.job | grep -oP \'(?<="job_id":) "(.*?)"\' | tr -d '"')' >> $GITHUB_ENV
+    - name: Wait for Aarch64 upload to finish
+      id: aarch64_wait
+      run: mash job wait --job-id "${{ env.AARCH_JOB_ID }}"
+  deploy-tumbleweed-x86-images:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Podman
+      id: install
+      run: sudo apt-get update && sudo apt-get -y install podman
+    - name: Pull OpenSuse Mash Image
+      id: pull
+      run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
+    - name: Run Container
+      id: container
+      run: podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish/mash:/mnt mash
+    - name: Create Mash Azure account
+      id: azure
+      run: mash account azure add --name azure --region centralus --source-container images --source-resource-group Tumbleweed --source-storage-account Tumbleweed --credentials ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Upload x86 images
+      id: x86_start
+      run: echo 'X86_JOB_ID=$(mash job azure add ./mash/azure_x86_64.job | grep -oP \'(?<="job_id":) "(.*?)"\' | tr -d '"')'
+    - name: Wait for X86 upload to finish
+      id: x86_wait
+      run: mash job wait --job-id "${{ env.X86_JOB_ID }}"
     
       
     
