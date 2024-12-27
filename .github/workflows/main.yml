@@ -4,6 +4,7 @@ jobs:
   deploy-tumbleweed-aarch-images:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
     - name: Install Podman
       id: install
       run: sudo apt-get update && sudo apt-get -y install podman
@@ -21,6 +22,7 @@ jobs:
   deploy-tumbleweed-x86-images:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
     - name: Install Podman
       id: install
       run: sudo apt-get update && sudo apt-get -y install podman
