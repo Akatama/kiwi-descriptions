@@ -10,6 +10,12 @@ jobs:
     - name: Pull OpenSuse Mash Image
       id: pull
       run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
+    - name: ls
+      id: ls
+      run: ls
+    - name: pwd
+      id: pwd
+      run: pwd
     - name: Upload Aarch64 image
       id: upload_aarch64_image
       run: | 
