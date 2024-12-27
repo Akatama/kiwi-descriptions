@@ -11,8 +11,8 @@ jobs:
       id: pull
       run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
     - name: ls
-      id: ls
-      run: ls
+      id: cd
+      run: cd publish/
     - name: pwd
       id: pwd
       run: pwd
