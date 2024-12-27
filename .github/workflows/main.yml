@@ -10,12 +10,6 @@ jobs:
     - name: Pull OpenSuse Mash Image
       id: pull
       run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
-    - name: ls
-      id: cd
-      run: cd publish/
-    - name: pwd
-      id: pwd
-      run: pwd
     - name: Upload Aarch64 image
       id: upload_aarch64_image
       run: | 
@@ -23,6 +17,7 @@ jobs:
         mash account azure add --name azure --region centralus --source-container images --source-resource-group Tumbleweed --source-storage-account Tumbleweed --credentials ${{ secrets.AZURE_CREDENTIALS }}
         AARCH_JOB_ID=$(mash job azure add ./mash/azure_aarch64.job | grep -oP '(?<="job_id":) "(.*?)"' | tr -d '"')
         mash job wait --job-id $AARCH_JOB_ID
+      working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
   deploy-tumbleweed-x86-images:
     runs-on: ubuntu-latest
     steps:
@@ -39,3 +34,4 @@ jobs:
         mash account azure add --name azure --region centralus --source-container images --source-resource-group Tumbleweed --source-storage-account Tumbleweed --credentials ${{ secrets.AZURE_CREDENTIALS }}
         X86_JOB_ID=$(mash job azure add ./mash/azure_x86_64.job | grep -oP '(?<="job_id":) "(.*?)"' | tr -d '"')
         mash job wait --job-id $X86_JOB_ID
+      working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
