@@ -11,7 +11,7 @@ jobs:
       id: pull
       run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
     - name: Upload Aarch64 image
-      id: Upload Aarch64
+      id: upload_aarch64_image
       run: | 
         podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish/mash:/mnt mash
         mash account azure add --name azure --region centralus --source-container images --source-resource-group Tumbleweed --source-storage-account Tumbleweed --credentials ${{ secrets.AZURE_CREDENTIALS }}
@@ -27,7 +27,7 @@ jobs:
       id: pull
       run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
     - name: Upload x86
-      id: container
+      id: upload_x86_image
       run: |
         podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish/mash:/mnt mash
         mash account azure add --name azure --region centralus --source-container images --source-resource-group Tumbleweed --source-storage-account Tumbleweed --credentials ${{ secrets.AZURE_CREDENTIALS }}
