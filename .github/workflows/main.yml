@@ -13,7 +13,7 @@ jobs:
       run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
     - name: Start mash image
       id: start_mash_image
-      run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish/mash:/mnt mash
+      run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish:/mnt mash
     - name: Upload AArch64 Image
       id: upload_aarch64_image
       run: podman exec --user masher mash /mnt/script.sh
