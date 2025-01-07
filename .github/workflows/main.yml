@@ -16,5 +16,5 @@ jobs:
       run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish/mash:/mnt mash
     - name: Upload AArch64 Image
       id: upload_aarch64_image
-      run: podman exec mash --user masher /mnt/script.sh
+      run: podman exec --user masher mash /mnt/script.sh
       working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
