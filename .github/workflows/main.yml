@@ -20,7 +20,7 @@ jobs:
       run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish:/mnt mash
     - name: Upload AArch64 Image
       id: upload_aarch64_image
-      run: sleep 10 && podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_aarch64.job" -c "/mnt/tumbleweedSP.json"
+      run: sleep 20 && podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_aarch64.job" -c "/mnt/tumbleweedSP.json"
       working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
   deploy-tumbleweed-x86-images:
     runs-on: ubuntu-latest
@@ -41,6 +41,6 @@ jobs:
       run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish:/mnt mash
     - name: Upload X86 Image
       id: upload_x86_image
-      run: sleep 10 && podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_x86_64.job" -c "/mnt/tumbleweedSP.json"
+      run: sleep 20 && podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_x86_64.job" -c "/mnt/tumbleweedSP.json"
       working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
 
