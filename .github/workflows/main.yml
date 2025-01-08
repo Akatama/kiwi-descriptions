@@ -20,5 +20,27 @@ jobs:
       run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish:/mnt mash
     - name: Upload AArch64 Image
       id: upload_aarch64_image
-      run: sleep 30 && podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_aarch64.job" -c "/mnt/tumbleweedSP.json"
+      run: sleep 10 && podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_aarch64.job" -c "/mnt/tumbleweedSP.json"
       working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
+  deploy-tumbleweed-x86-images:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Create Credential File
+      id: create_credential_file
+      run: printf '%s' '${{ secrets.AZURE_CREDENTIALS }}' > ./publish/tumbleweedSP.json
+      working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
+    - name: Install Podman
+      id: install
+      run: sudo apt-get update && sudo apt-get -y install podman
+    - name: Pull OpenSuse Mash Image
+      id: pull
+      run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
+    - name: Start mash image
+      id: start_mash_image
+      run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish:/mnt mash
+    - name: Upload X86 Image
+      id: upload_x86_image
+      run: sleep 10 && podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_x86_64.job" -c "/mnt/tumbleweedSP.json"
+      working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
+
