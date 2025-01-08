@@ -11,29 +11,10 @@ jobs:
     - name: Pull OpenSuse Mash Image
       id: pull
       run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
-    - name: Upload Aarch64 image
+    - name: Start mash image
+      id: start_mash_image
+      run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish:/mnt mash
+    - name: Upload AArch64 Image
       id: upload_aarch64_image
-      run: | 
-        podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish/mash:/mnt mash
-        mash account azure add --name azure --region centralus --source-container images --source-resource-group Tumbleweed --source-storage-account Tumbleweed --credentials ${{ secrets.AZURE_CREDENTIALS }}
-        AARCH_JOB_ID=$(mash job azure add ./mash/azure_aarch64.job | grep -oP '(?<="job_id":) "(.*?)"' | tr -d '"')
-        mash job wait --job-id $AARCH_JOB_ID
-      working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
-  deploy-tumbleweed-x86-images:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - name: Install Podman
-      id: install
-      run: sudo apt-get update && sudo apt-get -y install podman
-    - name: Pull OpenSuse Mash Image
-      id: pull
-      run: podman pull registry.opensuse.org/virtualization/appliances/images/images_tw/opensuse/mash:latest
-    - name: Upload x86
-      id: upload_x86_image
-      run: |
-        podman run --cap-add CAP_SYS_ADMIN --rm -ti --name mash --volume ./publish/mash:/mnt mash
-        mash account azure add --name azure --region centralus --source-container images --source-resource-group Tumbleweed --source-storage-account Tumbleweed --credentials ${{ secrets.AZURE_CREDENTIALS }}
-        X86_JOB_ID=$(mash job azure add ./mash/azure_x86_64.job | grep -oP '(?<="job_id":) "(.*?)"' | tr -d '"')
-        mash job wait --job-id $X86_JOB_ID
+      run: podman exec --user masher mash /mnt/script.sh
       working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
