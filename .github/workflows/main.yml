@@ -8,7 +8,7 @@ jobs:
     - name: Create Credential File
       id: create_credential_file
       run: |
-        echo "${{ secrets.AZURE_CREDENTIALS }}" > ./publish/tumbleweedSP.json
+        printf '%s' '${{ secrets.AZURE_CREDENTIALS }}' > ./publish/tumbleweedSP.json
         cat ./publish/tumbleweedSP.json
       working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
     - name: Install Podman
