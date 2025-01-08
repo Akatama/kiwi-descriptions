@@ -7,9 +7,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Create Credential File
       id: create_credential_file
-      run: |
-        printf '%s' '${{ secrets.AZURE_CREDENTIALS }}' > ./publish/tumbleweedSP.json
-        cat ./publish/tumbleweedSP.json
+      run: printf '%s' '${{ secrets.AZURE_CREDENTIALS }}' > ./publish/tumbleweedSP.json
       working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
     - name: Install Podman
       id: install
@@ -22,5 +20,5 @@ jobs:
       run: podman run --cap-add CAP_SYS_ADMIN --rm -d --name mash --volume ./publish:/mnt mash
     - name: Upload AArch64 Image
       id: upload_aarch64_image
-      run: podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_aarch64.job" -c "/mnt/tumbleweedSP.json"
+      run: sleep 30 && podman exec --user masher mash /mnt/azure.sh -p "/mnt/mash/azure_aarch64.job" -c "/mnt/tumbleweedSP.json"
       working-directory: /home/runner/work/kiwi-descriptions/kiwi-descriptions
