@@ -1,6 +1,7 @@
 on:
-  schedule:
-    - cron: '0 20 * * *'
+  push
+  #schedule:
+    #- cron: '0 20 * * *'
 name: Deploy Tumbleweed Images to Azure Shared Gallery
 jobs:
   deploy-tumbleweed-aarch-images:
