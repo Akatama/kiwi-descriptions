@@ -1,5 +1,4 @@
 on:
-  push
   schedule:
   - cron: '0 20 * * *'
 name: Deploy Tumbleweed Images to Azure Shared Gallery
